@@ -3334,7 +3334,7 @@ body {
 .studio .editor-divider {
   width: 100%;
   height: 1px;
-  margin: 24px 0 32px;
+  margin: 14px 0 32px;
   background: var(--border);
   opacity: 1;
 }
@@ -3508,8 +3508,6 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  border: 1px solid var(--border);
-  border-radius: 1px;
   font-weight: 400;
   letter-spacing: .1em;
 }
