@@ -8,22 +8,13 @@ import {SortableScene} from '@/components/sortable-scene';
 import {Tabs,TabsList,TabsTrigger} from '@/components/ui/tabs';
 import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
 import {DropdownMenu,DropdownMenuTrigger,DropdownMenuContent,DropdownMenuItem,DropdownMenuSeparator,DropdownMenuRadioGroup,DropdownMenuRadioItem,DropdownMenuCheckboxItem,DropdownMenuLabel} from '@/components/ui/dropdown-menu';
-import {Select,SelectTrigger,SelectValue,SelectContent,SelectItem} from '@/components/ui/select';
 import {Slider} from '@/components/ui/slider';
 import {type Workspace,type Project,type Scene,fresh,sample,newScene,uid,checkpoint,moveScene,manuscript,download,validate} from '@/lib/manuscript';
 import {sceneSwipe,type SwipePoint} from '@/lib/scene-swipe';
 import * as disk from '@/lib/storage';
 import * as cloud from '@/lib/cloud';
-const count=(s:string)=>[...s].length;
-const time=(s:string)=>new Date(s).toLocaleString('ko-KR',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-function Choice({value,onChange,items,label}:{value:string;onChange:(v:string)=>void;items:string[];label:string}){return <Select value={value} onValueChange={onChange}><SelectTrigger aria-label={label}><SelectValue/></SelectTrigger><SelectContent>{items.map(x=><SelectItem key={x} value={x}>{x}</SelectItem>)}</SelectContent></Select>}
-function IconButton({children,label,onClick,disabled=false}:{children:React.ReactNode;label:string;onClick:()=>void;disabled?:boolean}){return <button className="icon-button" title={label} aria-label={label} onClick={onClick} disabled={disabled}>{children}</button>}
-function ManuscriptField({value,label,onChange}:{value:string;label:string;onChange:(value:string)=>void}){
- const ref=useRef<HTMLTextAreaElement>(null);
- useLayoutEffect(()=>{const el=ref.current;if(!el)return;const resize=()=>{el.style.height='0px';el.style.height=el.scrollHeight+'px';};resize();},[value]);
- useEffect(()=>{const el=ref.current;if(!el)return;let alive=true;const resize=()=>{if(!alive)return;el.style.height='0px';el.style.height=el.scrollHeight+'px';};const observer=new ResizeObserver(resize);if(el.parentElement)observer.observe(el.parentElement);document.fonts.ready.then(resize);return()=>{alive=false;observer.disconnect();};},[]);
- return <textarea ref={ref} className="full-manuscript-editor" rows={1} aria-label={label} placeholder="본문" value={value} onChange={e=>onChange(e.target.value)}/>;
-}
+import {count,time} from '@/lib/format';
+import {Choice,IconButton,ManuscriptField} from '@/components/studio/fields';
 export default function Studio(){
  const [data,setData]=useState<Workspace|null>(null),dataRef=useRef<Workspace|null>(null),env=useRef<disk.Envelope|undefined>(undefined),queue=useRef(Promise.resolve()),failed=useRef(false),generation=useRef(0);
  const sensors=useSensors(useSensor(MouseSensor,{activationConstraint:{distance:6}}),useSensor(TouchSensor,{activationConstraint:{delay:320,tolerance:8}}),useSensor(KeyboardSensor,{coordinateGetter:sortableKeyboardCoordinates}));
