@@ -54,6 +54,14 @@ test('moveBefore / restoreOrder',()=>{
  assert.equal(o.moveBefore(p,order[0],'없음'),p);
 });
 
+test('insertAfter / removeScene',()=>{
+ const p=m.sample(),order=ids(p),s=m.newScene();
+ assert.deepEqual(ids(o.insertAfter(p,order[1],s)),[order[0],order[1],s.id,order[2],order[3],order[4]]);
+ assert.equal(o.insertAfter(p,order[4],s).scenes.at(-1).id,s.id);
+ assert.equal(o.insertAfter(p,'없음',s).scenes.at(-1).id,s.id);
+ assert.deepEqual(ids(o.removeScene(o.insertAfter(p,order[1],s),s.id)),order);
+});
+
 test('parseImport: Markdown과 백업',()=>{
  const [md]=io.parseImport('원고.md','서문\n\n## 첫째\n본문 1\n## 둘째\n본문 2');
  assert.equal(md.title,'원고');assert.deepEqual(md.scenes.map(s=>s.title),['첫 장면','첫째','둘째']);

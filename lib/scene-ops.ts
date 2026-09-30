@@ -40,6 +40,15 @@ export function restoreOrder(p:Project,order:string[]):Project{
  return {...p,scenes:[...p.scenes].sort((a,b)=>rank(a.id)-rank(b.id))};
 }
 
+// scene을 afterId 바로 뒤에 넣는다. afterId가 없으면 맨 뒤.
+export function insertAfter(p:Project,afterId:string,scene:Scene):Project{
+ const i=p.scenes.findIndex(x=>x.id===afterId),scenes=[...p.scenes];
+ scenes.splice(i<0?scenes.length:i+1,0,scene);
+ return {...p,scenes};
+}
+
+export function removeScene(p:Project,id:string):Project{return {...p,scenes:p.scenes.filter(x=>x.id!==id)};}
+
 // from을 before 앞으로 옮긴다.
 export function moveBefore(p:Project,from:string,before:string):Project{
  const moving=p.scenes.find(x=>x.id===from);
