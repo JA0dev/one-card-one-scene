@@ -139,3 +139,12 @@ export function duplicateScene(p: Project, id: string): { project: Project; id: 
   const copy: Scene = { ...s, id: uid(), title: s.title ? s.title + ' (사본)' : '', versions: [], trashedAt: null, updatedAt: now() };
   return { project: insertScene(p, copy, { after: id }), id: copy.id };
 }
+
+/** 이력의 index번째 모습으로 되돌린다. 지금 모습은 이력 맨 앞에 남긴다. */
+export function restoreVersion(p: Project, id: string, index: number): Project {
+  const s = findScene(p, id);
+  const v = s?.versions[index];
+  if (!s || !v) return p;
+  const kept = { ...s, versions: [{ at: now(), title: s.title, body: s.body }, ...s.versions].slice(0, 50) };
+  return { ...p, scenes: p.scenes.map((x) => (x.id === id ? { ...kept, title: v.title, body: v.body, updatedAt: now() } : x)) };
+}

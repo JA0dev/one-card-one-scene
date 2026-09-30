@@ -45,13 +45,19 @@ export class Repo {
     this.emit();
   }
 
-  /** 다른 탭에서 저장하면 그 작품을 다시 읽는다. */
+  /** 다른 탭에서 저장하면 그 작품만 다시 읽는다. */
+  private readonly tab = Math.random().toString(36).slice(2);
   private listenOtherTabs() {
-    if (typeof BroadcastChannel === 'undefined') return;
+    if (typeof BroadcastChannel === 'undefined' || this.channel) return;
     this.channel = new BroadcastChannel('scene-card:' + this.local.name);
-    this.channel.onmessage = async () => {
-      const all = await this.local.loadAll();
-      this.records = new Map(all.map((r) => [r.id, r]));
+    this.channel.onmessage = async (e: MessageEvent<{ from: string; ids: string[] }>) => {
+      if (e.data?.from === this.tab) return;
+      const all = new Map((await this.local.loadAll()).map((r) => [r.id, r]));
+      for (const id of e.data?.ids ?? []) {
+        const r = all.get(id);
+        if (r) this.records.set(id, r);
+        else this.records.delete(id);
+      }
       this.emit();
     };
   }
@@ -59,7 +65,11 @@ export class Repo {
   /** 저장은 한 줄로 세워 차례대로 한다. */
   private persist(put: LocalRecord[], remove: string[] = []) {
     this.writing = this.writing
-      .then(async () => { await this.local.put(put); await this.local.remove(remove); this.channel?.postMessage('changed'); })
+      .then(async () => {
+        await this.local.put(put);
+        await this.local.remove(remove);
+        this.channel?.postMessage({ from: this.tab, ids: [...put.map((r) => r.id), ...remove] });
+      })
       .catch((e) => this.fail(new Error('기기에 저장하지 못했어요. 백업을 내려받아 주세요. (' + (e as Error).message + ')')));
     return this.writing;
   }

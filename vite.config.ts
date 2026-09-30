@@ -5,5 +5,6 @@ import { fileURLToPath } from 'node:url';
 export default defineConfig({
   plugins: [react()],
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
-  build: { outDir: 'out', rollupOptions: { input: 'index.html' } },
+  // 첫 화면 묶음은 gzip 약 190KB(React·Radix·dnd-kit·Supabase). Word 내보내기(docx)는 따로 불러온다.
+  build: { outDir: 'out', rollupOptions: { input: 'index.html' }, chunkSizeWarningLimit: 700 },
 });

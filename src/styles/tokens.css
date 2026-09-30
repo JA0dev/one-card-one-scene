@@ -1,0 +1,80 @@
+/* 색·글꼴·간격 토큰. 색은 여기서만 정한다.
+   팔레트 '노을 구름': 진행 단계는 밝은 색에서 짙은 색으로 차오르고, 선택은 하늘색. */
+
+@font-face { font-family: 'Pretendard'; src: url('/fonts/PretendardVariable.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: 'Noto Serif KR'; src: url('/fonts/NotoSerifKR-Variable.woff2') format('woff2'); font-weight: 200 900; font-display: swap; }
+
+:root {
+  color-scheme: light;
+  --bg: #f7f1f0;
+  --bg-deep: #efe6e4;
+  --surface: #fffdfc;
+  --surface-2: #fbf6f4;
+  --ink: #2e2733;
+  --ink-2: #5f5463;
+  --ink-3: #8f8492;
+  --line: #eadfdd;
+  --line-strong: #dcd0ce;
+  --hover: #f1e8e6;
+  --overlay: rgb(46 39 51 / 0.28);
+
+  --stage-idea: #f9c7a4;
+  --stage-draft: #f1a9aa;
+  --stage-revise: #cc98af;
+  --stage-done: #af9db7;
+  --select: #87bfd8;
+  --select-ink: #3f7f9c;
+  --select-soft: #e3f1f7;
+  --danger: #b4495a;
+  --warn: #b7793e;
+
+  --shadow-card: 0 1px 2px rgb(46 39 51 / 0.05), 0 0 0 1px rgb(46 39 51 / 0.05);
+  --shadow-lift: 0 10px 24px -12px rgb(46 39 51 / 0.22), 0 0 0 1px rgb(46 39 51 / 0.06);
+  --shadow-pop: 0 18px 48px -18px rgb(46 39 51 / 0.35), 0 0 0 1px rgb(46 39 51 / 0.07);
+
+  --font-ui: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+  --font-serif: 'Noto Serif KR', 'Nanum Myeongjo', serif;
+  --radius: 8px;
+  --radius-card: 6px;
+  --header-h: 60px;
+  --gutter: 40px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #151318;
+  --bg-deep: #100e12;
+  --surface: #1e1b21;
+  --surface-2: #231f27;
+  --ink: #eee8ef;
+  --ink-2: #c3b8c5;
+  --ink-3: #8f8492;
+  --line: #312c35;
+  --line-strong: #3e3843;
+  --hover: #29242d;
+  --overlay: rgb(0 0 0 / 0.5);
+
+  --stage-idea: #d9a887;
+  --stage-draft: #d38c8e;
+  --stage-revise: #b07f96;
+  --stage-done: #9786a1;
+  --select: #6aa6c0;
+  --select-ink: #9fd0e6;
+  --select-soft: #1f3440;
+  --danger: #e07a8a;
+  --warn: #d9a36a;
+
+  --shadow-card: 0 0 0 1px rgb(255 255 255 / 0.05);
+  --shadow-lift: 0 12px 28px -14px rgb(0 0 0 / 0.6), 0 0 0 1px rgb(255 255 255 / 0.08);
+  --shadow-pop: 0 18px 48px -16px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+
+[data-stage='idea'] { --stage: var(--stage-idea); }
+[data-stage='draft'] { --stage: var(--stage-draft); }
+[data-stage='revise'] { --stage: var(--stage-revise); }
+[data-stage='done'] { --stage: var(--stage-done); }
+
+@media (max-width: 760px) {
+  :root { --header-h: 54px; --gutter: 16px; }
+}
