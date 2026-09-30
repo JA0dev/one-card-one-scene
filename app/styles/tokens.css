@@ -1,14 +1,20 @@
 :root {
   --sidebar: transparent;
-  --background: #eeefef;
-  --foreground: #2a2a2a;
-  --paper: #fcfcfc;
-  --muted: #e9eaea;
-  --muted-foreground: #666b68;
-  --border: #dcdedc;
-  --accent: #2a2a2a;
-  --hover: #e9eaea;
-  --soft-accent: #ececec;
+  --background: #f7f1f0;
+  --foreground: #2e2733;
+  --paper: #fffdfc;
+  --muted: #f1e9e8;
+  --muted-foreground: #7a6d7c;
+  --border: #eadfdf;
+  --accent: #2e2733;
+  --hover: #f1e9e8;
+  --soft-accent: #f1e9e8;
+  /* 팔레트 '노을 구름': 진행 단계는 밝은 색에서 짙은 색으로 차오르고, 선택은 하늘색으로 표시한다. */
+  --stage-idea: #f9c7a4;
+  --stage-draft: #f1a9aa;
+  --stage-revise: #cc98af;
+  --stage-done: #af9db7;
+  --select: #87bfd8;
   --shadow: none;
   color-scheme: light;
   --font-sans: 'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;
@@ -20,15 +26,20 @@
 
 .dark {
   --sidebar: #1c1f1c;
-  --background: #131313;
-  --foreground: #e6e6e6;
-  --paper: #1b1b1b;
-  --muted: #232323;
+  --background: #151318;
+  --foreground: #ebe6ec;
+  --paper: #1d1a20;
+  --muted: #26222a;
   --muted-foreground: #b0b5b1;
-  --border: #353936;
-  --accent: #e6e6e6;
-  --hover: #232323;
+  --border: #38333c;
+  --accent: #ebe6ec;
+  --hover: #26222a;
   --soft-accent: #262626;
+  --stage-idea: #d9a887;
+  --stage-draft: #d38c8e;
+  --stage-revise: #b07f96;
+  --stage-done: #9786a1;
+  --select: #6aa6c0;
   --shadow: none;
   color-scheme: dark;
   --sheet-shadow: 0 0 0 1px #ffffff0a;

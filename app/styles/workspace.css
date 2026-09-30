@@ -190,20 +190,21 @@ button:hover {
   color: var(--muted-foreground);
 }
 
-.stage-dot {
-  height: 5px;
-  width: 5px;
+.stage-mark {
+  display: inline-block;
+  flex: none;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #b5bac7;
+  vertical-align: middle;
+  background: var(--stage-idea);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb,var(--foreground) 8%,transparent);
 }
 
-.stage-dot.draft {
-  background: #8995df;
-}
-
-.stage-dot.done {
-  background: #70a193;
-}
+[data-stage=draft] { --stage: var(--stage-draft); }
+[data-stage=revise] { --stage: var(--stage-revise); }
+[data-stage=done] { --stage: var(--stage-done); }
+.stage-mark[data-stage] { background: var(--stage,var(--stage-idea)); }
 
 .mini-progress {
   height: 3px;
@@ -371,7 +372,6 @@ button:hover {
   letter-spacing: 1px;
 }
 
-.stage { font-size: 12px; font-weight: 400; line-height: 1.5; color: var(--muted-foreground); }
 
 .card-divider { display: block; flex: none; width: 14px; height: 1px; margin: 12px 0 14px; background: var(--muted-foreground); opacity: .4; }
 
@@ -1259,7 +1259,7 @@ body {
   z-index: 1;
 }
 
-.minimal-cards .card-top>div:first-child,.minimal-cards .card-bottom {
+.minimal-cards .card-number,.minimal-cards .card-bottom {
   display: none;
 }
 
@@ -3075,13 +3075,10 @@ body {
 }
 
 .studio .scene-card.chosen,
-.studio .scene-card.chosen:hover {
-  border-color: transparent;
-  box-shadow: 0 0 0 1px #00000038;
-}
-
+.studio .scene-card.chosen:hover,
 .dark .studio .scene-card.chosen, .dark .studio .scene-card.chosen:hover {
-  box-shadow: 0 0 0 1px #ffffff40;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--select);
 }
 
 .studio .scene-card.sorting-target {
@@ -3124,27 +3121,18 @@ body {
   color: var(--muted-foreground);
 }
 
-.studio .timeline-fill, .studio .timeline-fill.done {
-  height: 3px;
-  border-radius: 0;
-  background: #d5d7d8;
-}
-
-.dark .studio .timeline-fill, .dark .studio .timeline-fill.done {
-  background: #333;
-}
-
-.studio .timeline-fill.done {
-  background: #9a9c9d;
-}
-
-.dark .studio .timeline-fill.done {
-  background: #666;
-}
-
+.studio .timeline-fill,
+.dark .studio .timeline-fill,
 .studio .timeline-track button.selected .timeline-fill,
 .dark .studio .timeline-track button.selected .timeline-fill {
-  background: var(--foreground);
+  height: 3px;
+  border: 0;
+  border-radius: 2px;
+  background: var(--stage,var(--stage-idea));
+}
+
+.studio .timeline-track button.selected .timeline-fill {
+  box-shadow: 0 0 0 1.5px var(--select);
 }
 
 @media (min-width: 761px) {
