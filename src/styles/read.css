@@ -1,0 +1,52 @@
+/* 이어보기 */
+.read { display: grid; grid-template-columns: 280px minmax(0, 1fr); min-height: calc(100dvh - var(--header-h)); }
+.outline-side { position: sticky; top: var(--header-h); height: calc(100dvh - var(--header-h)); display: flex; flex-direction: column; border-right: 1px solid var(--line); background: color-mix(in srgb, var(--bg-deep) 40%, var(--bg)); }
+.outline-side .outline { flex: 1; overflow: auto; padding: 24px 16px; }
+.outline-total { padding: 14px 24px; font-size: 12.5px; color: var(--ink-3); border-top: 1px solid var(--line); }
+.outline-group + .outline-group { margin-top: 10px; }
+.outline-chapter { display: flex; align-items: center; gap: 6px; width: 100%; min-height: 36px; padding: 0 8px; border-radius: 8px; text-align: left; color: var(--ink-3); }
+.outline-chapter:hover { background: var(--hover); }
+.outline-ch-num { font-size: 13px; font-weight: 600; }
+.outline-chapter strong { flex: 1; color: var(--ink); font-size: 14.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.outline-count { font-size: 12px; }
+.outline ol { display: grid; gap: 1px; list-style: none; padding: 2px 0 0 12px; }
+.outline-scene { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 36px; padding: 0 10px; border-radius: 8px; text-align: left; font-size: 14px; color: var(--ink-2); }
+.outline-scene:hover { background: var(--hover); color: var(--ink); }
+.outline-scene.is-on { background: var(--select-soft); color: var(--ink); font-weight: 600; }
+.outline-num { font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.outline-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.read-main { min-width: 0; padding: 36px var(--gutter) 120px; }
+.read-main > .lens-bar { max-width: 720px; padding: 0 0 12px; }
+.outline-open { display: none; }
+.ms { max-width: 720px; margin: 0 auto; color: var(--ink); }
+.ms-title { font-family: var(--font-ui); font-size: 15px; font-weight: 600; color: var(--ink-3); text-align: center; margin-bottom: 40px; }
+.ms-chapter + .ms-chapter { margin-top: 72px; }
+.ms-chapter-head { text-align: center; margin-bottom: 36px; font-family: var(--font-ui); }
+.ms-chapter-head span { font-size: 13px; color: var(--ink-3); font-weight: 600; }
+.ms-chapter-head h2 { font-size: 30px; font-weight: 750; letter-spacing: -0.5px; margin-top: 4px; }
+.ms-scene { scroll-margin-top: calc(var(--header-h) + 20px); }
+.ms-scene + .ms-scene { margin-top: 36px; }
+.ms-scene:focus { outline: none; }
+.ms-scene-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-family: var(--font-ui); font-size: 13px; color: var(--ink-3); line-height: 1.4; }
+.ms-num { font-variant-numeric: tabular-nums; }
+.ms-name { font-weight: 550; }
+.ms-rule { flex: 1; height: 1px; background: var(--line); }
+.ms-open { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 14px; font-size: 12.5px; font-weight: 600; color: var(--select-ink); background: var(--select-soft); opacity: 0; transition: opacity 0.15s; }
+.ms-scene:hover .ms-open, .ms-scene:focus-within .ms-open, .ms-open:focus-visible, .ms-scene.is-current .ms-open { opacity: 1; }
+.ms-scene.is-current .ms-num, .ms-scene.is-current .ms-name { color: var(--select-ink); }
+.ms-body { display: block; width: 100%; font-family: inherit; color: var(--ink); }
+.ms-body::placeholder { color: var(--ink-3); opacity: 0.6; font-style: italic; }
+
+@media (max-width: 960px) {
+  .read { grid-template-columns: minmax(0, 1fr); }
+  .outline-side { display: none; }
+  .outline-open { position: sticky; top: calc(var(--header-h) + 8px); z-index: 4; display: inline-flex; align-items: center; gap: 6px; float: right; min-height: 36px; padding: 0 12px; border-radius: 18px; background: var(--surface); box-shadow: var(--shadow-lift); font-size: 13px; font-weight: 600; }
+}
+@media (max-width: 760px) {
+  .read-main { padding: 20px 20px 40px; }
+  .ms-chapter-head h2 { font-size: 24px; }
+  .ms-open { opacity: 1; }
+  .ms-open { font-size: 0; gap: 0; padding: 7px; }
+  .ms-open svg { width: 15px; height: 15px; }
+}

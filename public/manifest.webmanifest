@@ -1,1 +1,1 @@
-{"name":"씬 — 작은 이야기 작업실","short_name":"씬","start_url":"/","display":"standalone","background_color":"#f6f7f9","theme_color":"#5362cb","lang":"ko","icons":[{"src":"/favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]}
+{"name":"씬 카드","short_name":"씬 카드","description":"씬 하나를 카드 한 장에. 장면을 펼쳐 놓고 쓰는 글쓰기 작업실.","start_url":"/","display":"standalone","background_color":"#f7f1f0","theme_color":"#f7f1f0","lang":"ko","icons":[{"src":"/favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]}

@@ -1,0 +1,67 @@
+/* 기본: 초기화, 글꼴, 버튼, 입력, 초점 */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+button, input, textarea, select { font: inherit; color: inherit; background: none; border: 0; }
+button { cursor: pointer; }
+button:disabled { cursor: default; opacity: 0.45; }
+input, textarea { outline: none; }
+textarea { resize: none; }
+svg { flex: none; }
+ul { list-style: none; }
+:focus-visible { outline: 2px solid var(--select); outline-offset: 2px; border-radius: 4px; }
+/* 글 입력칸은 각자 모양으로 초점을 보여준다 */
+input:focus-visible, textarea:focus-visible { outline: none; }
+::selection { background: color-mix(in srgb, var(--select) 35%, transparent); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.muted { color: var(--ink-3); }
+.serif { font-family: var(--font-serif); }
+.flip { transform: scaleX(-1); }
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+* { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--ink) 20%, transparent) transparent; }
+
+/* 버튼 */
+.icon-btn {
+  position: relative; display: inline-grid; place-items: center;
+  width: 40px; height: 40px; border-radius: 10px; color: var(--ink-2);
+  transition: background 0.15s, color 0.15s;
+}
+.icon-btn:hover { background: var(--hover); color: var(--ink); }
+.icon-btn.is-active { color: var(--select-ink); background: var(--select-soft); }
+.icon-btn.is-soft { background: color-mix(in srgb, var(--stage-done) 22%, var(--surface)); color: var(--ink); }
+.icon-btn.is-soft:hover { background: color-mix(in srgb, var(--stage-done) 34%, var(--surface)); }
+.count-pip {
+  position: absolute; top: 4px; right: 3px; min-width: 16px; height: 16px; padding: 0 4px;
+  border-radius: 8px; background: var(--select); color: #fff; font-size: 10px; font-weight: 700; line-height: 16px;
+}
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 40px; padding: 0 16px; border-radius: var(--radius); font-weight: 550; font-size: 14px;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.btn-ghost { background: var(--surface); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.btn-ghost:hover { background: var(--hover); }
+.btn-primary { background: var(--ink); color: var(--surface); }
+.btn-primary:hover { background: color-mix(in srgb, var(--ink) 85%, var(--select)); }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-quiet { color: var(--ink-2); padding: 0 10px; }
+.btn-quiet:hover { background: var(--hover); color: var(--ink); }
+.link-btn { color: var(--select-ink); font-size: 13px; font-weight: 600; padding: 6px 4px; }
+.link-btn:hover { text-decoration: underline; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
