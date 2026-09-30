@@ -1,6 +1,6 @@
 -- 씬 카드 v2: 작품마다 한 줄로 저장한다.
 -- Supabase 대시보드 → SQL Editor에 이 파일 전체를 붙여 넣고 Run 한 번.
--- 여러 번 실행해도 안전하다. 예전 표(scene_workspaces)는 건드리지 않는다.
+-- 여러 번 실행해도 안전하다. (예전 앱의 scene_workspaces 표는 2026-09에 원고를 옮긴 뒤 지웠다)
 
 -- 1. 작품 표 ────────────────────────────────────────────────────────────
 create table if not exists public.scene_projects (

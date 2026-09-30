@@ -49,5 +49,5 @@
 - 예전 앱(scene-studio-v1)의 원고가 기기에 있으면 처음 열 때 한 번 옮겨 온다.
 
 ## 서버 설정 (Supabase)
-`supabase/migrations/002_scene_projects.sql`을 SQL Editor에서 한 번 실행한다. 작품마다 한 줄(`scene_projects`), 저장은 `save_scene_project`(번호표가 맞을 때만), 삭제는 `delete_scene_project`(삭제 표시), 이전 판은 작품마다 50개. `001_…legacy.sql`은 예전 앱의 표로, 새 앱은 쓰지 않는다.
+`supabase/migrations/002_scene_projects.sql`을 SQL Editor에서 한 번 실행한다. 작품마다 한 줄(`scene_projects`), 저장은 `save_scene_project`(번호표가 맞을 때만), 삭제는 `delete_scene_project`(삭제 표시), 이전 판은 작품마다 50개. 예전 앱의 표(`scene_workspaces`)는 원고를 백업 파일로 옮긴 뒤 지웠다. 계정(`auth.users`)은 그대로다.
 주소와 공개 키는 `.env`의 `VITE_SUPABASE_URL`, `VITE_SUPABASE_KEY`로 바꿀 수 있다(`.env.example` 참고).
