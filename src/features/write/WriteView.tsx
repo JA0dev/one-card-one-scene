@@ -1,7 +1,7 @@
 // 집필: 카드 한 장을 집어 들고 쓴다. 왼쪽에는 같은 장의 카드들이 보인다.
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { ArrowRightLeft, ChevronLeft, ChevronRight, Copy, History, Merge, MoreHorizontal, NotebookPen, RotateCcw, Scissors, Trash2 } from 'lucide-react';
-import { chapterIndex, chapterTitle } from '@/domain/chapters';
+import { ArrowRightLeft, ChevronDown, ChevronLeft, ChevronRight, Copy, History, Merge, MoreHorizontal, NotebookPen, RotateCcw, Scissors, Trash2 } from 'lucide-react';
+import { chapterIndex, chapterTitle, groupByChapter } from '@/domain/chapters';
 import { activeScenes, findScene, neighbor } from '@/domain/scenes';
 import { count, countNoSpace, fmt, pad, when } from '@/domain/text';
 import type { Project, Scene } from '@/domain/types';
@@ -57,7 +57,7 @@ export function WriteView({ sceneId }: { sceneId: string }) {
 
   return (
     <div className="write">
-      <Rail project={project} scene={scene} siblings={siblings} chapterLabel={chapter ? `${chapterIndex(project, chapter.id) + 1}장` : ''} chapterName={chapter ? chapterTitle(chapter) : '모든 카드'} onBack={back} />
+      <Rail project={project} scene={scene} />
       <article className="paper" key={scene.id}>
         <div className="paper-bar">
           <button type="button" className="paper-back" onClick={back}><ChevronLeft size={18} /><span>펼쳐보기</span></button>
@@ -114,24 +114,50 @@ function Meta({ label, value, onChange }: { label: string; value: string; onChan
   );
 }
 
-function Rail({ project, scene, siblings, chapterLabel, chapterName, onBack }: { project: Project; scene: Scene; siblings: Scene[]; chapterLabel: string; chapterName: string; onBack: () => void }) {
+/** 왼쪽 카드 목록: 모든 장을 보여주고, 지금 장만 펼쳐 둔다. 다른 장은 눌러서 펼친다. */
+function Rail({ project, scene }: { project: Project; scene: Scene }) {
   const number = new Map(activeScenes(project).map((s, i) => [s.id, i + 1]));
-  const ref = useRef<HTMLOListElement>(null);
+  const groups = groupByChapter(project);
+  const here = scene.chapterId ?? 'flat';
+  const [open, setOpen] = useState<Set<string>>(() => new Set([here]));
+  const ref = useRef<HTMLDivElement>(null);
+  // 다른 장의 카드로 넘어가면 그 장을 펼친다.
+  useEffect(() => { setOpen((o) => (o.has(here) ? o : new Set(o).add(here))); }, [here]);
   useEffect(() => { ref.current?.querySelector('[aria-current]')?.scrollIntoView({ block: 'nearest' }); }, [scene.id]);
+  const toggle = (key: string) => setOpen((o) => { const n = new Set(o); if (n.has(key)) n.delete(key); else n.add(key); return n; });
   return (
-    <aside className="rail" aria-label="같은 장의 카드">
-      <button type="button" className="rail-back" onClick={onBack}><ChevronLeft size={18} />펼쳐보기</button>
-      <div className="rail-chapter">{chapterLabel && <span>{chapterLabel}</span>}<strong>{chapterName}</strong></div>
-      <ol ref={ref} className="rail-list">
-        {siblings.map((s) => (
-          <li key={s.id}>
-            <button type="button" className={cx('rail-card', s.id === scene.id && 'is-on')} aria-current={s.id === scene.id ? 'true' : undefined} onClick={() => { positions.delete(s.id); act.openScene(s.id); }}>
-              <span className="rail-top"><span>{pad(number.get(s.id) ?? 0)}</span><StageDot stage={s.stage} size="sm" /></span>
-              <span className="rail-title">{s.title || '제목 없는 씬'}</span>
-            </button>
-          </li>
-        ))}
-      </ol>
+    <aside className="rail" aria-label="카드 목록">
+      <div ref={ref} className="rail-scroll">
+        {groups.map(({ chapter, scenes }, gi) => {
+          const key = chapter?.id ?? 'flat';
+          const isOpen = !chapter || open.has(key);
+          return (
+            <section key={key} className={cx('rail-group', key === here && 'is-here')}>
+              {chapter && (
+                <button type="button" className="rail-chapter" aria-expanded={isOpen} onClick={() => toggle(key)}>
+                  {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                  <span className="rail-ch-num">{gi + 1}장</span>
+                  <strong>{chapterTitle(chapter)}</strong>
+                  <span className="rail-ch-count">{scenes.length}</span>
+                </button>
+              )}
+              {isOpen && (
+                <ol className="rail-list">
+                  {scenes.map((s) => (
+                    <li key={s.id}>
+                      <button type="button" className={cx('rail-card', s.id === scene.id && 'is-on')} aria-current={s.id === scene.id ? 'true' : undefined} onClick={() => { positions.delete(s.id); act.openScene(s.id); }}>
+                        <span className="rail-top"><span>{pad(number.get(s.id) ?? 0)}</span><StageDot stage={s.stage} size="sm" /></span>
+                        <span className="rail-title">{s.title || '제목 없는 씬'}</span>
+                      </button>
+                    </li>
+                  ))}
+                  {scenes.length === 0 && <li className="rail-empty">카드가 없어요</li>}
+                </ol>
+              )}
+            </section>
+          );
+        })}
+      </div>
     </aside>
   );
 }
