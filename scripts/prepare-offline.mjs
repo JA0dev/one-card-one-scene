@@ -1,0 +1,14 @@
+import {readdir,readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+const assets=(await readdir('out/assets')).filter(x=>/\.(js|css|woff2?|svg|png)$/.test(x)).map(x=>'/assets/'+x);
+const fonts=(await readdir('out/fonts')).filter(x=>/\.woff2$/.test(x)).map(x=>'/fonts/'+x);
+assets.push(...fonts);
+const fontHash=createHash('sha256');
+for(const font of fonts)fontHash.update(await readFile('out'+font));
+const html=await readFile('out/index.html','utf8');
+const revision=createHash('sha256').update(html+assets.join()+fontHash.digest('hex')).digest('hex').slice(0,12);
+let sw=await readFile('public/sw.js','utf8');
+sw=sw.replace("const CACHE='scene-shell-v1';",`const CACHE='scene-shell-${revision}';`);
+sw=sw.replace("['/','/manifest.webmanifest','/favicon.svg']",JSON.stringify(['/','/manifest.webmanifest','/favicon.svg',...assets]));
+await writeFile('out/sw.js',sw);
+console.log('Offline shell:',assets.length,'assets, revision',revision);
