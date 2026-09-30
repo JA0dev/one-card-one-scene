@@ -10,11 +10,11 @@ export function splitScene(p:Project,id:string,pos:number):{project:Project;newI
  return {project:{...p,scenes:p.scenes.flatMap(x=>x.id===id?[{...checkpoint(x),body:x.body.slice(0,pos).replace(/\n+$/,'')},next]:[x])},newId:next.id};
 }
 
-// 다음 씬의 본문을 이어 붙이고, 다음 씬 카드는 보류함으로 보낸다.
+// 다음 씬의 본문을 이어 붙이고, 다음 씬 카드는 휴지통으로 보낸다.
 export function mergeScenes(p:Project,id:string,nextId:string):Project{
  const next=p.scenes.find(x=>x.id===nextId);
  if(!next||id===nextId)return p;
- return {...p,scenes:p.scenes.map(x=>x.id===id?{...checkpoint(x),body:[x.body,next.body].filter(b=>b.trim()).join('\n\n')}:x.id===nextId?{...checkpoint(x),bucket:'held'}:x)};
+ return {...p,scenes:p.scenes.map(x=>x.id===id?{...checkpoint(x),body:[x.body,next.body].filter(b=>b.trim()).join('\n\n')}:x.id===nextId?{...checkpoint(x),bucket:'trash'}:x)};
 }
 
 export function duplicateScene(p:Project,id:string):{project:Project;newId:string}|null{
@@ -48,6 +48,14 @@ export function insertAfter(p:Project,afterId:string,scene:Scene):Project{
 }
 
 export function removeScene(p:Project,id:string):Project{return {...p,scenes:p.scenes.filter(x=>x.id!==id)};}
+
+export function emptyTrash(p:Project):Project{return {...p,scenes:p.scenes.filter(x=>x.bucket!=='trash')};}
+
+// from을 맨 뒤로 옮긴다.
+export function moveToEnd(p:Project,from:string):Project{
+ const moving=p.scenes.find(x=>x.id===from);
+ return moving?{...p,scenes:[...p.scenes.filter(x=>x.id!==from),moving]}:p;
+}
 
 // from을 before 앞으로 옮긴다.
 export function moveBefore(p:Project,from:string,before:string):Project{

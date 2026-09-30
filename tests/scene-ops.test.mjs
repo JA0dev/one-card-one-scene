@@ -24,10 +24,10 @@ test('splitScene: 커서 위치에서 나누고 바로 뒤에 새 씬',()=>{
  assert.equal(o.splitScene(p,s.id,s.body.length),null);
 });
 
-test('mergeScenes: 본문을 잇고 다음 씬은 보류함',()=>{
+test('mergeScenes: 본문을 잇고 다음 씬은 휴지통',()=>{
  const p=m.sample(),[a,b]=p.scenes,r=o.mergeScenes(p,a.id,b.id);
  assert.equal(r.scenes[0].body,a.body+'\n\n'+b.body);
- assert.equal(r.scenes[1].bucket,'held');
+ assert.equal(r.scenes[1].bucket,'trash');
  assert.deepEqual(ids(r),ids(p));
  const empty=o.mergeScenes(p,p.scenes[2].id,p.scenes[3].id);
  assert.equal(empty.scenes[2].body,'');
@@ -39,9 +39,9 @@ test('duplicateScene: 끝에 사본, 이력은 비움',()=>{
 });
 
 test('setBucket / neighborInBucket',()=>{
- const p=o.setBucket(m.sample(),m.sample().scenes[0].id,'held');
- const q=m.sample(),held=o.setBucket(q,q.scenes[1].id,'held');
- assert.equal(held.scenes[1].bucket,'held');
+ const p=o.setBucket(m.sample(),m.sample().scenes[0].id,'trash');
+ const q=m.sample(),held=o.setBucket(q,q.scenes[1].id,'trash');
+ assert.equal(held.scenes[1].bucket,'trash');
  assert.equal(o.neighborInBucket(held,q.scenes[0].id,1),q.scenes[2].id);
  assert.equal(o.neighborInBucket(held,q.scenes[0].id,-1),undefined);
  assert.equal(p.scenes.length,5);
@@ -60,6 +60,19 @@ test('insertAfter / removeScene',()=>{
  assert.equal(o.insertAfter(p,order[4],s).scenes.at(-1).id,s.id);
  assert.equal(o.insertAfter(p,'없음',s).scenes.at(-1).id,s.id);
  assert.deepEqual(ids(o.removeScene(o.insertAfter(p,order[1],s),s.id)),order);
+});
+
+test('emptyTrash / moveToEnd',()=>{
+ const p=m.sample(),order=ids(p),t=o.setBucket(o.setBucket(p,order[1],'trash'),order[3],'trash');
+ assert.deepEqual(ids(o.emptyTrash(t)),[order[0],order[2],order[4]]);
+ assert.deepEqual(ids(o.moveToEnd(p,order[0])),[order[1],order[2],order[3],order[4],order[0]]);
+});
+
+test('normalize: 예전 보류함은 휴지통으로',()=>{
+ const w=m.fresh();w.projects[0].scenes[0].bucket='held';
+ assert.ok(m.validate(w));
+ const n=m.normalize(w);assert.equal(n.projects[0].scenes[0].bucket,'trash');
+ const clean=m.fresh();assert.equal(m.normalize(clean),clean);
 });
 
 test('parseImport: Markdown과 백업',()=>{
